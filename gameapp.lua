@@ -29,6 +29,8 @@ local AudioBuffer = require 'audio.buffer'
 local safetolua = require 'gameapp.serialize'.safetolua
 local safefromlua = require 'gameapp.serialize'.safefromlua
 
+-- TODO better way to set this?  like maybe as a ctor arg of something?
+-- maybe as an arg of imguiapp.withorbit ?
 require 'glapp.view'.useBuiltinMatrixMath = true
 
 
