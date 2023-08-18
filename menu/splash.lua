@@ -81,10 +81,9 @@ end
 
 function SplashMenu:endSplashScreen()
 	local app = self.app
-	local MainMenu = require 'gameapp.menu.main'
 	-- play the demo
 	app.paused = false
-	app.menustate = MainMenu(app)
+	app.menu = app.Menu.Main(app)
 end
 
 return SplashMenu

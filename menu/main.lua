@@ -15,31 +15,26 @@ end
 
 function MainMenu:updateGUI()
 	local app = self.app
-	self:beginFullView('Sand Attack', 6 * 32)
+	self:beginFullView(app.title, 6 * 32)
 
 	if self:centerButton'New Game' then
-		-- TODO choose gametype and choose level
-		local NewGameMenu = require 'gameapp.menu.newgame'
-		app.menustate = NewGameMenu(app)
+		app.menu = app.Menu.NewGame(app)
 	end
 	if self:centerButton'New Game Co-op' then
-		local NewGameMenu = require 'gameapp.menu.newgame'
-		app.menustate = NewGameMenu(app, true)
+		app.menu = app.Menu.NewGame(app, true)
 		-- TODO pick same as before except pick # of players
 	end
-	-- TODO RESUME GAME here
+	-- TODO ADD A RESUME GAME here
 	if self:centerButton'Config' then
-		-- pushMenuState only used for entering config menu
-		-- if I need any more 'back' options than this then i'll turn the menustate into a stack
-		app.pushMenuState = app.menustate
-		local ConfigMenu = require 'gameapp.menu.config'
-		app.menustate = ConfigMenu(app)
+		-- pushMenu only used for entering config menu
+		-- if I need any more 'back' options than this then i'll turn the menu into a stack
+		app.pushMenu = app.menu
+		app.menu = app.Menu.Config(app)
 	end
 	if self:centerButton'High Scores' then
-		local HighScoreMenu = require 'gameapp.menu.highscore'
-		app.menustate = HighScoreMenu(app)
+		app.menu = app.Menu.HighScore(app)
 	end
-	local url = 'https://github.com/thenumbernine/gameapp'
+	local url = app.url
 	if self:centerButton'About' then
 		if ffi.os == 'Windows' then
 			os.execute('explorer "'..url..'"')

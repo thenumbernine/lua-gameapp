@@ -34,7 +34,11 @@ require 'glapp.view'.useBuiltinMatrixMath = true
 
 local GameApp = require 'imguiapp.withorbit'()
 
+-- titlebar and menu title 
 GameApp.title = 'GameApp'
+
+-- menu "about"
+GameApp.url = 'https://github.com/thenumbernine/lua-gameapp'
 
 -- override in GLApp
 GameApp.sdlInitFlags = bit.bor(
@@ -49,6 +53,19 @@ GameApp.fontPath = nil	-- set to override font
 GameApp.fontScale = 2
 
 GameApp.configPath = 'config.lua'
+
+-- override these ...
+local Menu = require 'gameapp.menu.menu'
+GameApp.Menu = Menu
+
+-- override subclasses that the GameApp uses:
+Menu.Splash = require 'gameapp.menu.splash'
+Menu.Main = require 'gameapp.menu.main'
+
+-- also needed / used by MainMenu:
+--Menu.NewGame
+--Menu.Config = require 'gameapp.menu.config'
+--Menu.HighScore = require 'gameapp.menu.highscore'
 
 function GameApp:initGL(...)
 	GameApp.super.initGL(self, ...)
@@ -214,8 +231,7 @@ void main() {
 
 	-- menu
 
-	local SplashMenu = require 'gameapp.menu.splash'
-	self.splashMenu = SplashMenu(self)
+	self.splashMenu = self.Menu.Splash(self)
 	self.menu = self.splashMenu
 end
 
