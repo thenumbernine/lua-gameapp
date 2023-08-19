@@ -2,6 +2,7 @@ local getTime = require 'ext.timer'.getTime
 local sdl = require 'ffi.req' 'sdl'
 local gl = require 'gl'
 local GLProgram = require 'gl.program'
+local GLSceneObject = require 'gl.sceneobject'
 local Menu = require 'gameapp.menu.menu'
 
 local SplashMenu = Menu:subclass()
@@ -31,19 +32,25 @@ void main() {
 	fragColor = vec4(texcoordv, 0., 1.);
 }
 ]],
+	}:useNone()
+
+	self.splashSceneObj = GLSceneObject{
+		geometry = app.quadGeom,
+		program = self.splashShader,
 		attrs = {
 			vertex = app.quadVertexBuf,
 		},
-	}:useNone()
+	}
 end
 
 function SplashMenu:update()
 	local app = self.app
 	local view = app.view
 
-	self.splashShader
-		:use()
-		:enableAttrs()
+	local shader = self.splashShader
+	local sceneObj = self.splashSceneObj
+	shader:use()
+	sceneObj:enableAndSetAttrs()
 
 	local aspectRatio = app.width / app.height
 	view.projMat:setOrtho(-.5 * aspectRatio, .5 * aspectRatio, -.5, .5, -1, 1)
@@ -51,13 +58,12 @@ function SplashMenu:update()
 		:setTranslate(-.5 * aspectRatio, -.5)
 		:applyScale(aspectRatio, 1)
 	view.mvProjMat:mul4x4(view.projMat, view.mvMat)
-	gl.glUniformMatrix4fv(self.splashShader.uniforms.mvProjMat.loc, 1, gl.GL_FALSE, view.mvProjMat.ptr)
+	gl.glUniformMatrix4fv(shader.uniforms.mvProjMat.loc, 1, gl.GL_FALSE, view.mvProjMat.ptr)
 
-	gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
+	sceneObj.geometry:draw()
 
-	self.splashShader
-		:disableAttrs()
-		:useNone()
+	sceneObj:disableAttrs()
+	shader:useNone()
 
 	if getTime() - self.startTime > self.duration then
 		self:endSplashScreen()

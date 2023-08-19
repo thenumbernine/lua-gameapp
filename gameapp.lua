@@ -21,6 +21,8 @@ local gl = require 'gl'
 local glreport = require 'gl.report'
 local GLProgram = require 'gl.program'
 local GLArrayBuffer = require 'gl.arraybuffer'
+local GLGeometry = require 'gl.geometry'
+local GLSceneObject = require 'gl.sceneobject'
 
 local Audio = require 'audio'
 local AudioSource = require 'audio.source'
@@ -181,11 +183,20 @@ void main() {
 		: vec4(0.);
 }
 ]],
+	}:useNone()
 
+	self.quadGeom = GLGeometry{
+		mode = gl.GL_TRIANGLE_STRIP,
+		count = 4,
+	}
+
+	self.guiButtonSceneObj = GLSceneObject{
+		geometry = self.quadGeom,
+		program = self.guiButtonShader,
 		attrs = {
 			vertex = self.quadVertexBuf,
 		},
-	}:useNone()
+	}
 
 	-- audio 
 
@@ -324,13 +335,13 @@ function GameApp:drawTouchRegions()
 
 	local buttonRadius = self.width * self.cfg.screenButtonRadius
 
-	local shader = self.guiButtonShader
+	local sceneObj = self.guiButtonSceneObj
+	local shader = sceneObj.program
 
 	gl.glEnable(gl.GL_BLEND)
 	gl.glBlendFunc(gl.GL_SRC_ALPHA, gl.GL_ONE)
-	shader
-		:use()
-		:enableAttrs()
+	shader:use()
+	sceneObj:enableAndSetAttrs()
 	view.projMat:setOrtho(0, self.width, self.height, 0, -1, 1)
 	for i=1,self.cfg.numPlayers do
 		for _,keyname in ipairs(Player.keyNames) do
@@ -347,13 +358,12 @@ function GameApp:drawTouchRegions()
 					:applyScale(2*buttonRadius, 2*buttonRadius)
 				self.mvProjMat:mul4x4(view.projMat, view.mvMat)
 				gl.glUniformMatrix4fv(shader.uniforms.mvProjMat.loc, 1, gl.GL_FALSE, self.mvProjMat.ptr)
-				gl.glDrawArrays(gl.GL_TRIANGLE_STRIP, 0, 4)
+				sceneObj.geometry:draw()
 			end
 		end
 	end
-	shader
-		:disableAttrs()
-		:useNone()
+	sceneObj:disableAttrs()
+	shader:useNone()
 	gl.glDisable(gl.GL_BLEND)
 end
 
