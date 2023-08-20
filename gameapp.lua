@@ -66,6 +66,9 @@ GameApp.Menu = Menu
 Menu.Splash = require 'gameapp.menu.splash'
 Menu.Main = require 'gameapp.menu.main'
 
+-- Player class, right now only used for listing keys
+GameApp.Player = {}
+
 -- also needed / used by MainMenu:
 --Menu.NewGame
 --Menu.Config = require 'gameapp.menu.config'
@@ -331,6 +334,7 @@ end
 -- called from PlayingMenu:update, PlayerKeysEditor:update
 -- because it's a ui / input feature I'll use app.cfg instead of app.playcfg
 function GameApp:drawTouchRegions()
+	local Player = self.Player
 	local view = self.view
 
 	local buttonRadius = self.width * self.cfg.screenButtonRadius
@@ -371,6 +375,7 @@ end
 
 -- this is used for player input, not for demo playback, so it'll use .cfg instead of .playcfg
 function GameApp:processButtonEvent(press, ...)
+	local Player = self.Player
 	local buttonRadius = self.width * self.cfg.screenButtonRadius
 
 	-- TODO put the callback somewhere, not a global
