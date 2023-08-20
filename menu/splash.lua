@@ -9,7 +9,6 @@ local SplashMenu = Menu:subclass()
 
 SplashMenu.duration = 3
 
--- TODO cool sand effect or something
 function SplashMenu:init(app, ...)
 	SplashMenu.super.init(self, app, ...)
 	self.startTime = getTime()
@@ -47,23 +46,16 @@ function SplashMenu:update()
 	local app = self.app
 	local view = app.view
 
-	local shader = self.splashShader
-	local sceneObj = self.splashSceneObj
-	shader:use()
-	sceneObj:enableAndSetAttrs()
-
 	local aspectRatio = app.width / app.height
 	view.projMat:setOrtho(-.5 * aspectRatio, .5 * aspectRatio, -.5, .5, -1, 1)
 	view.mvMat
 		:setTranslate(-.5 * aspectRatio, -.5)
 		:applyScale(aspectRatio, 1)
 	view.mvProjMat:mul4x4(view.projMat, view.mvMat)
-	gl.glUniformMatrix4fv(shader.uniforms.mvProjMat.loc, 1, gl.GL_FALSE, view.mvProjMat.ptr)
 
-	sceneObj.geometry:draw()
-
-	sceneObj:disableAttrs()
-	shader:useNone()
+	local sceneObj = self.splashSceneObj
+	sceneObj.uniforms.mvProjMat = view.mvProjMat.ptr
+	sceneObj:draw()
 
 	if getTime() - self.startTime > self.duration then
 		self:endSplashScreen()
