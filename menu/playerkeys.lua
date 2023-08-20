@@ -16,7 +16,7 @@ function PlayerKeysEditor:init(app)
 	self.app = assert(app)
 	--static-init after the app has been created
 	if not defaultKeys then
-		local App = require 'sand-attack.app'
+		local App = require 'gameapp'
 		defaultKeys = {
 			{
 				up = {sdl.SDL_KEYDOWN, sdl.SDLK_UP},
@@ -48,7 +48,7 @@ function PlayerKeysEditor:update()
 end
 
 function PlayerKeysEditor:updateGUI()
-	local Player = require 'sand-attack.player'
+	local Player = require 'gameapp'.Player
 	local app = self.app
 	local multiplayer = app.cfg.numPlayers > 1	
 	-- should player keys be here or config?

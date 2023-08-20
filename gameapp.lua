@@ -71,7 +71,7 @@ GameApp.Player = {}
 
 -- also needed / used by MainMenu:
 --Menu.NewGame
---Menu.Config = require 'gameapp.menu.config'
+Menu.Config = require 'gameapp.menu.config'
 --Menu.HighScore = require 'gameapp.menu.highscore'
 
 function GameApp:initGL(...)
