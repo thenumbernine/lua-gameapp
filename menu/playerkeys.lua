@@ -10,32 +10,45 @@ local sdl = require 'ffi.req' 'sdl'
 local PlayerKeysEditor = class()
 
 -- default key mappings for first few players
-local defaultKeys
+PlayerKeysEditor.defaultKeys = {
+	{
+		up = {sdl.SDL_KEYDOWN, sdl.SDLK_UP},
+		down = {sdl.SDL_KEYDOWN, sdl.SDLK_DOWN},
+		left = {sdl.SDL_KEYDOWN, sdl.SDLK_LEFT},
+		right = {sdl.SDL_KEYDOWN, sdl.SDLK_RIGHT},
+		pause = {sdl.SDL_KEYDOWN, sdl.SDLK_ESCAPE},
+	},
+	{
+		up = {sdl.SDL_KEYDOWN, ('w'):byte()},
+		down = {sdl.SDL_KEYDOWN, ('s'):byte()},
+		left = {sdl.SDL_KEYDOWN, ('a'):byte()},
+		right = {sdl.SDL_KEYDOWN, ('d'):byte()},
+		pause = {},	-- sorry keypad player 2
+	},
+}
 
 function PlayerKeysEditor:init(app)
 	self.app = assert(app)
+	local Player = app.Player
 	--static-init after the app has been created
-	if not defaultKeys then
+	if not select(2, next(self.defaultKeys[1])).name then
 		local App = require 'gameapp'
-		defaultKeys = {
-			{
-				up = {sdl.SDL_KEYDOWN, sdl.SDLK_UP},
-				down = {sdl.SDL_KEYDOWN, sdl.SDLK_DOWN},
-				left = {sdl.SDL_KEYDOWN, sdl.SDLK_LEFT},
-				right = {sdl.SDL_KEYDOWN, sdl.SDLK_RIGHT},
-				pause = {sdl.SDL_KEYDOWN, sdl.SDLK_ESCAPE},
-			},
-			{
-				up = {sdl.SDL_KEYDOWN, ('w'):byte()},
-				down = {sdl.SDL_KEYDOWN, ('s'):byte()},
-				left = {sdl.SDL_KEYDOWN, ('a'):byte()},
-				right = {sdl.SDL_KEYDOWN, ('d'):byte()},
-				pause = {},	-- sorry keypad player 2
-			},
-		}
-		for _,keyEvents in ipairs(defaultKeys) do
+		for _,keyEvents in ipairs(self.defaultKeys) do
 			for keyName,event in pairs(keyEvents) do
 				event.name = App:getEventName(table.unpack(event))
+			end
+		end
+	end
+	assert(select(2, next(self.defaultKeys[1])).name)
+
+	-- initialize keys if necessary
+	-- also in updateGUI
+	for i=1,app.cfg.numPlayers do
+		if not app.cfg.playerKeys[i] then
+			app.cfg.playerKeys[i] = {}
+			local defaultsrc = self.defaultKeys[i]
+			for _,keyname in ipairs(Player.keyNames) do
+				app.cfg.playerKeys[i][keyname] = defaultsrc and defaultsrc[keyname] or {}
 			end
 		end
 	end
@@ -48,8 +61,8 @@ function PlayerKeysEditor:update()
 end
 
 function PlayerKeysEditor:updateGUI()
-	local Player = require 'gameapp'.Player
 	local app = self.app
+	local Player = app.Player
 	local multiplayer = app.cfg.numPlayers > 1	
 	-- should player keys be here or config?
 	-- config: because it is in every other game
@@ -57,7 +70,7 @@ function PlayerKeysEditor:updateGUI()
 	for i=1,app.cfg.numPlayers do
 		if not app.cfg.playerKeys[i] then
 			app.cfg.playerKeys[i] = {}
-			local defaultsrc = defaultKeys[i]
+			local defaultsrc = self.defaultKeys[i]
 			for _,keyname in ipairs(Player.keyNames) do
 				app.cfg.playerKeys[i][keyname] = defaultsrc and defaultsrc[keyname] or {}
 			end

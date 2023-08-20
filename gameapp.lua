@@ -11,6 +11,7 @@ has stuff a game would want
 - imgui w/ custom fonts
 --]]
 local ffi = require 'ffi'
+local template = require 'template'
 local table = require 'ext.table'
 local path = require 'ext.path'
 local getTime = require 'ext.timer'.getTime
@@ -141,6 +142,7 @@ function GameApp:initGL(...)
 		end)
 	end
 	self.cfg = self.cfg or {}
+	self.cfg.numPlayers = self.cfg.numPlayers or 1
 	self.cfg.playerKeys = self.cfg.playerKeys or {}
 	self.cfg.screenButtonRadius = self.cfg.screenButtonRadius or .05
 
