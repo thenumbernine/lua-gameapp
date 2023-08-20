@@ -523,9 +523,7 @@ function GameApp:update(...)
 	gl.glClearColor(.5, .5, .5, 1)
 	gl.glClear(gl.GL_COLOR_BUFFER_BIT)
 	
-	if not self.paused then
-		-- TODO update game
-	end
+	self:updateGame()
 
 	-- update GUI
 	GameApp.super.update(self, ...)
@@ -547,6 +545,11 @@ print(self.fps)
 			self.fpsSampleCount = 0
 		end
 	end
+end
+		
+-- TODO update game
+-- or maybe make this another object?
+function GameApp:updateGame()
 end
 
 -- TODO hmm I now have push/pop wrappers around updateGUI, how to subclass it further ...
