@@ -1,6 +1,6 @@
 --[[
-this isn't a menustate
-but it's going to contain some controls used by both the NewGame and Config menustates
+this isn't a menu state
+but it's going to contain some controls used by both the NewGame and Config menu states
 --]]
 local table = require 'ext.table'
 local class = require 'ext.class'

@@ -52,10 +52,10 @@ function ConfigMenu:updateGUI()
 	ig.igNewLine()
 	if self:centerButton'Done' then
 		app:saveConfig()
-		-- you shouldn't be able to enter the config menustate without pushMenuState being set
-		app.menustate = assert(app.pushMenuState)
-		-- likewise don't leave the config menustate without clearning the last stat
-		app.pushMenuState = nil
+		-- you shouldn't be able to enter the config menu without pushMenu being set
+		app.menu = assert(app.pushMenu)
+		-- likewise don't leave the config menu without clearning the last stat
+		app.pushMenu = nil
 	end
 	self:endFullView()
 end

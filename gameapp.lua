@@ -144,6 +144,8 @@ function GameApp:initGL(...)
 	self.cfg = self.cfg or {}
 	self.cfg.numPlayers = self.cfg.numPlayers or 1
 	self.cfg.playerKeys = self.cfg.playerKeys or {}
+	self.cfg.effectVolume = self.cfg.effectVolume or 1
+	self.cfg.backgroundVolume = self.cfg.backgroundVolume or .3
 	self.cfg.screenButtonRadius = self.cfg.screenButtonRadius or .05
 
 	-- graphics
@@ -259,6 +261,11 @@ function GameApp:exit()
 	end
 	GameApp.super.exit(self)
 end
+
+function GameApp:saveConfig()
+	path(self.configPath):write(safetolua(self.cfg))
+end
+
 
 function GameApp:loadSound(filename)
 	if not filename then error("warning: couldn't find sound file "..searchfilename) end
