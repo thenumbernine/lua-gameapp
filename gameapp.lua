@@ -252,6 +252,7 @@ void main() {
 	-- menu
 
 	self.splashMenu = self.Menu.Splash(self)
+	self.mainMenu = self.Menu.Main(self)
 	self.menu = self.splashMenu
 end
 

@@ -81,7 +81,7 @@ function SplashMenu:endSplashScreen()
 	local app = self.app
 	-- play the demo
 	app.paused = false
-	app.menu = app.Menu.Main(app)
+	app.menu = app.mainMenu
 end
 
 return SplashMenu
