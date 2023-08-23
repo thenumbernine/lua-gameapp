@@ -1,6 +1,7 @@
 local ffi = require 'ffi'
 local table = require 'ext.table'
 local ig = require 'imgui'
+local sdl = require 'ffi.req' 'sdl'
 local Menu = require 'gameapp.menu.menu'
 
 
@@ -87,15 +88,28 @@ function MainMenu:updateGUI()
 	self:beginFullView(app.title, 6 * 32)
 
 	for _,opt in ipairs(self.menuOptions) do
-		if self:centerButton(opt.name) then
-			opt.click(self)
-		end
-		if opt.after then
-			opt.after(self)
+		if not opt.visible or opt.visible(self) then
+			if self:centerButton(opt.name) then
+				opt.click(self)
+			end
+			if opt.after then
+				opt.after(self)
+			end
 		end
 	end
 
 	self:endFullView()
+end
+
+function MainMenu:event(e)
+	local app = self.app
+	if e.type == sdl.SDL_KEYDOWN
+	and e.key.keysym.sym == sdl.SDLK_ESCAPE
+	and app.game
+	then
+		app.paused = false
+		app.menu = app.playingMenu
+	end
 end
 
 return MainMenu
