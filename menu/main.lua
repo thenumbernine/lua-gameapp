@@ -10,6 +10,17 @@ local MainMenu = Menu:subclass()
 -- 'self' is the MainMenu object
 MainMenu.menuOptions = table{
 	{
+		name = 'Resume Game',
+		click = function(self)
+			local app = self.app
+			app.menu = app.playingMenu
+			app.playingMenu:resumeGame()
+		end,
+		visible = function(self)
+			return self.app.game ~= nil
+		end,
+	},
+	{
 		name = 'New Game',
 		click = function(self)
 			local app = self.app
