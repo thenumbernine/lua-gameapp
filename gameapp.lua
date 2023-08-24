@@ -37,6 +37,51 @@ local safefromlua = require 'gameapp.serialize'.safefromlua
 require 'glapp.view'.useBuiltinMatrixMath = true
 
 
+ffi.cdef[[
+typedef uint64_t randSeed_t;
+]]
+
+-- I'm trying to make reproducible random #s
+-- it is reproducible up to the generation of the next pieces
+-- but the very next piece after will always be dif
+-- this maybe is due to the sand toppling also using rand?
+-- but why wouldn't that random() call even be part of the determinism?
+-- seems something external must be contributing?
+--[[ TODO put this in ext? or its own lib?
+local class = require 'ext.class'
+local RNG = class()
+-- TODO max and the + and % constants are bad, fix them
+RNG.max = 2147483647ull
+require 'ffi.req' 'c.time'
+function RNG:init(seed)
+	self.seed = ffi.cast('uint64_t', tonumber(seed) or ffi.C.time(nil))
+end
+function RNG:next(max)
+	self.seed = self.seed * 1103515245ull + 12345ull
+	return self.seed % (self.max + 1)
+end
+function RNG:__call(max)
+	if max then
+		return tonumber(self:next() % max) + 1	-- +1 for lua compat
+	else
+		return tonumber(self:next()) / tonumber(self.max)
+	end
+end
+--]]
+-- [[ Lua code says: xoshira256** algorithm
+-- but is only a singleton...
+local class = require 'ext.class'
+local RNG = class()
+function RNG:init(seed)
+	math.randomseed(tonumber(seed))
+end
+function RNG:__call(...)
+	return math.random(...)
+end
+--]]
+
+
+
 local GameApp = require 'imguiapp.withorbit'()
 
 -- titlebar and menu title 
@@ -50,6 +95,8 @@ GameApp.sdlInitFlags = bit.bor(
 	GameApp.sdlInitFlags,	-- default is just SDL_INIT_VIDEO
 	sdl.SDL_INIT_JOYSTICK
 )
+
+GameApp.RNG = RNG
 
 GameApp.useAudio = true		-- set to false to disable audio altogether
 GameApp.maxAudioDist = 10
@@ -66,6 +113,7 @@ GameApp.Menu = Menu
 -- override subclasses that the GameApp uses:
 Menu.Splash = require 'gameapp.menu.splash'
 Menu.Main = require 'gameapp.menu.main'
+Menu.NewGame = require 'gameapp.menu.newgame'
 Menu.Playing = require 'gameapp.menu.playing'
 
 -- Player class, right now only used for listing keys
@@ -143,11 +191,13 @@ function GameApp:initGL(...)
 		end)
 	end
 	self.cfg = self.cfg or {}
-	self.cfg.numPlayers = self.cfg.numPlayers or 1
+	-- make sure to run PlayerEditKeys:update() at least once to fill this out with defaults
 	self.cfg.playerKeys = self.cfg.playerKeys or {}
 	self.cfg.effectVolume = self.cfg.effectVolume or 1
 	self.cfg.backgroundVolume = self.cfg.backgroundVolume or .3
 	self.cfg.screenButtonRadius = self.cfg.screenButtonRadius or .05
+	self.cfg.numPlayers = self.cfg.numPlayers or 1
+	self.cfg.randseed = self.cfg.randseed or ffi.new('randSeed_t', -1)
 
 	-- graphics
 
@@ -256,6 +306,15 @@ void main() {
 	self.mainMenu = self.Menu.Main(self)
 	self.playingMenu = self.Menu.Playing(self)
 	self.menu = self.splashMenu
+	
+
+	-- SandAttack used :reset()
+	-- Zelda4D used .game = Game()
+	-- which should I stick with?
+	-- TODO put this in whichever.
+	-- probaby going to be .game = Game()
+	-- put this in Game ctor
+	-- and have specific app subclass Game
 end
 
 function GameApp:exit()

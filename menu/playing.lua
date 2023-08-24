@@ -6,7 +6,14 @@ local PlayingMenu = Menu:subclass()
 
 function PlayingMenu:init(app)
 	PlayingMenu.super.init(self, app)
-	app.paused = false
+end
+
+function PlayingMenu:startNewGame()
+	self.app.paused = false
+end
+
+function PlayingMenu:resumeGame()
+	self.app.paused = false
 end
 
 function PlayingMenu:update()

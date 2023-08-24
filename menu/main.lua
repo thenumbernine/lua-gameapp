@@ -13,7 +13,9 @@ MainMenu.menuOptions = table{
 		name = 'New Game',
 		click = function(self)
 			local app = self.app
-			-- TODO migrate over the NewGame menu
+			-- TODO should menu objs persist or should i allocate them upon menu switch?
+			-- for all other menus they're persisting,
+			-- but this one i'm allocating on menu switch.
 			app.menu = app.Menu.NewGame(app)
 		end,
 	},
