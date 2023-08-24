@@ -66,6 +66,7 @@ GameApp.Menu = Menu
 -- override subclasses that the GameApp uses:
 Menu.Splash = require 'gameapp.menu.splash'
 Menu.Main = require 'gameapp.menu.main'
+Menu.Playing = require 'gameapp.menu.playing'
 
 -- Player class, right now only used for listing keys
 GameApp.Player = {}
@@ -253,6 +254,7 @@ void main() {
 
 	self.splashMenu = self.Menu.Splash(self)
 	self.mainMenu = self.Menu.Main(self)
+	self.playingMenu = self.Menu.Playing(self)
 	self.menu = self.splashMenu
 end
 

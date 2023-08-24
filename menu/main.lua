@@ -13,6 +13,7 @@ MainMenu.menuOptions = table{
 		name = 'New Game',
 		click = function(self)
 			local app = self.app
+			-- TODO migrate over the NewGame menu
 			app.menu = app.Menu.NewGame(app)
 		end,
 	},
