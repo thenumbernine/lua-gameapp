@@ -514,7 +514,11 @@ end
 function GameApp:event(e, ...)
 	-- handle UI
 	GameApp.super.event(self, e, ...)
-	-- TODO if ui handling then return
+	
+	-- if ui handling then return
+	-- TODO this might cancel events when menu.playing is open
+	local canHandleKeyboard = not ig.igGetIO()[0].WantCaptureKeyboard
+	local canHandleMouse = not ig.igGetIO()[0].WantCaptureMouse
 
 	if self.menu.event then
 		if self.menu:event(e, ...) then return end
@@ -570,10 +574,11 @@ function GameApp:event(e, ...)
 	elseif e.type == sdl.SDL_CONTROLLERBUTTONDOWN or e.type == sdl.SDL_CONTROLLERBUTTONUP then
 		local press = e.type == sdl.SDL_CONTROLLERBUTTONDOWN
 		self:processButtonEvent(press, sdl.SDL_CONTROLLERBUTTONDOWN, e.cbutton.which, e.cbutton.button)
-	elseif e.type == sdl.SDL_KEYDOWN or e.type == sdl.SDL_KEYUP then
+	-- always handle release button events or else we get into trouble
+	elseif (canHandleKeyboard and e.type == sdl.SDL_KEYDOWN) or e.type == sdl.SDL_KEYUP then
 		local press = e.type == sdl.SDL_KEYDOWN
 		self:processButtonEvent(press, sdl.SDL_KEYDOWN, e.key.keysym.sym)
-	elseif e.type == sdl.SDL_MOUSEBUTTONDOWN or e.type == sdl.SDL_MOUSEBUTTONUP then
+	elseif (canHandleMouse and e.type == sdl.SDL_MOUSEBUTTONDOWN) or e.type == sdl.SDL_MOUSEBUTTONUP then
 		local press = e.type == sdl.SDL_MOUSEBUTTONDOWN
 		self:processButtonEvent(press, sdl.SDL_MOUSEBUTTONDOWN, tonumber(e.button.x)/self.width, tonumber(e.button.y)/self.height, e.button.button)
 	--elseif e.type == sdl.SDL_MOUSEWHEEL then
