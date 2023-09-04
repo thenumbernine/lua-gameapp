@@ -273,6 +273,7 @@ void main() {
 				self.audioSources[i] = src
 			end
 
+			-- TODO how about picking just one file?
 			self.bgMusicFiles = table()
 			if path'music':isdir() then
 				for f in path'music':dir() do
