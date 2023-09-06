@@ -615,7 +615,8 @@ function GameApp:update(...)
 		if self.thisTime - self.lastFrameTime >= 1 then
 			local deltaTime = self.thisTime - self.lastFrameTime
 			self.fps = self.fpsSampleCount / deltaTime
-print(self.fps)
+print('fps', self.fps)
+--print('dt', 1/self.fps)
 			self.lastFrameTime = self.thisTime
 			self.fpsSampleCount = 0
 		end
