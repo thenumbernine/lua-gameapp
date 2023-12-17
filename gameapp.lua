@@ -277,7 +277,7 @@ void main() {
 			self.bgMusicFiles = table()
 			if path'music':isdir() then
 				for f in path'music':dir() do
-					if f:match'%.ogg$' then
+					if f.path:match'%.ogg$' then
 						self.bgMusicFiles:insert('music/'..f)
 					end
 				end
