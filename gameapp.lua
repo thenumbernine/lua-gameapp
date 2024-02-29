@@ -13,6 +13,7 @@ has stuff a game would want
 local ffi = require 'ffi'
 local template = require 'template'
 local table = require 'ext.table'
+local range = require 'ext.range'
 local path = require 'ext.path'
 local getTime = require 'ext.timer'.getTime
 local sdl = require 'ffi.req' 'sdl'
@@ -323,6 +324,22 @@ function GameApp:exit()
 		self.audio:shutdown()
 	end
 	GameApp.super.exit(self)
+end
+
+function GameApp:resetGame()
+	
+	-- NOTICE THIS IS A SHALLOW COPY
+	-- that means subtables (player keys, custom colors) won't be copied
+	-- not sure if i should bother since neither of those things are used by playcfg but ....
+	self.playcfg = table(self.cfg):setmetatable(nil)
+
+
+	self.players = range(self.playcfg.numPlayers):mapi(function(i)
+		return self.Player{index=i, app=self}
+	end)
+	
+	-- TODO put this in parent class
+	self.rng = self.RNG(self.playcfg.randseed)
 end
 
 function GameApp:saveConfig()

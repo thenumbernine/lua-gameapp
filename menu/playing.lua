@@ -8,8 +8,10 @@ function PlayingMenu:init(app)
 	PlayingMenu.super.init(self, app)
 end
 
+-- called from gameapp.menu.newgame
 function PlayingMenu:startNewGame()
 	self.app.paused = false
+	self.app:resetGame()
 end
 
 function PlayingMenu:resumeGame()
