@@ -327,12 +327,10 @@ function GameApp:exit()
 end
 
 function GameApp:resetGame()
-	
 	-- NOTICE THIS IS A SHALLOW COPY
 	-- that means subtables (player keys, custom colors) won't be copied
 	-- not sure if i should bother since neither of those things are used by playcfg but ....
 	self.playcfg = table(self.cfg):setmetatable(nil)
-
 
 	self.players = range(self.playcfg.numPlayers):mapi(function(i)
 		return self.Player{index=i, app=self}
@@ -514,7 +512,9 @@ function GameApp:processButtonEvent(press, ...)
 						end
 					end
 				end
-				if match then
+				if match 
+				and self.players	-- not created until resetGame
+				then
 					local player = self.players[playerIndex]
 					if player
 					and (
