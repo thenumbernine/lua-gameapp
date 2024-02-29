@@ -116,8 +116,8 @@ Menu.Main = require 'gameapp.menu.main'
 Menu.NewGame = require 'gameapp.menu.newgame'
 Menu.Playing = require 'gameapp.menu.playing'
 
--- Player class, right now only used for listing keys
-GameApp.Player = {}
+local Player = require 'gameapp.player'
+GameApp.Player = Player
 
 -- also needed / used by MainMenu:
 --Menu.NewGame
