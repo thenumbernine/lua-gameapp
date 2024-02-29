@@ -447,7 +447,7 @@ function GameApp:drawTouchRegions()
 					x-buttonRadius,
 					y-buttonRadius)
 					:applyScale(2*buttonRadius, 2*buttonRadius)
-				self.mvProjMat:mul4x4(view.projMat, view.mvMat)
+				view.mvProjMat:mul4x4(view.projMat, view.mvMat)
 				gl.glUniformMatrix4fv(shader.uniforms.mvProjMat.loc, 1, gl.GL_FALSE, self.mvProjMat.ptr)
 				sceneObj.geometry:draw()
 			end
