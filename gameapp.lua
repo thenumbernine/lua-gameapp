@@ -33,11 +33,6 @@ local AudioBuffer = require 'audio.buffer'
 local safetolua = require 'gameapp.serialize'.safetolua
 local safefromlua = require 'gameapp.serialize'.safefromlua
 
--- TODO better way to set this?  like maybe as a ctor arg of something?
--- maybe as an arg of imguiapp.withorbit ?
-require 'glapp.view'.useBuiltinMatrixMath = true
-
-
 ffi.cdef[[
 typedef uint64_t randSeed_t;
 ]]
@@ -82,8 +77,9 @@ end
 --]]
 
 
-
-local GameApp = require 'imguiapp.withorbit'()
+local GameApp = require 'imguiapp.withorbit'{
+	viewUseBuiltinMatrixMath = true,
+}
 
 -- titlebar and menu title 
 GameApp.title = 'GameApp'
