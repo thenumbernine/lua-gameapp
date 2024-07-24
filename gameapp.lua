@@ -209,16 +209,10 @@ function GameApp:initGL(...)
 		data = vtxbufCPU,
 	}:unbind()
 
-	--self.glslVersion = 460	-- too new
-	--self.glslVersion = 430
-	--self.glslVersion = '320 es'	-- too new
-	self.glslVersion = '300 es'
-	self.shaderHeader =
-'#version '..self.glslVersion..'\n'
-..'precision highp float;\n'
-
 	self.guiButtonShader = GLProgram{
-		vertexCode = self.shaderHeader..[[
+		version = 'latest',
+		precision = 'best',
+		vertexCode = [[
 in vec2 vertex;
 out vec2 texcoordv;
 uniform mat4 mvProjMat;
@@ -227,7 +221,7 @@ void main() {
 	gl_Position = mvProjMat * vec4(vertex, 0., 1.);
 }
 ]],
-		fragmentCode = self.shaderHeader..[[
+		fragmentCode = [[
 in vec2 texcoordv;
 out vec4 fragColor;
 void main() {
