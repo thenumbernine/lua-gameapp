@@ -117,8 +117,8 @@ end
 
 function MainMenu:event(e)
 	local app = self.app
-	if e.type == sdl.SDL_KEYDOWN
-	and e.key.keysym.sym == sdl.SDLK_ESCAPE
+	if e[0].type == sdl.SDL_KEYDOWN
+	and e[0].key.keysym.sym == sdl.SDLK_ESCAPE
 	and app.game
 	then
 		app.paused = false
