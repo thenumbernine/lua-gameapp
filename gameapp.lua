@@ -77,9 +77,7 @@ end
 --]]
 
 
-local GameApp = require 'imguiapp.withorbit'{
-	viewUseBuiltinMatrixMath = true,
-}
+local GameApp = require 'imguiapp.withorbit'()
 
 -- titlebar and menu title 
 GameApp.title = 'GameApp'
