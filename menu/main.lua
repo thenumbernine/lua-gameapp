@@ -1,7 +1,7 @@
 local ffi = require 'ffi'
 local table = require 'ext.table'
 local ig = require 'imgui'
-local sdl = require 'ffi.req' 'sdl'
+local sdl = require 'sdl'
 local Menu = require 'gameapp.menu.menu'
 
 

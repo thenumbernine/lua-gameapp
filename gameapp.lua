@@ -16,7 +16,7 @@ local table = require 'ext.table'
 local range = require 'ext.range'
 local path = require 'ext.path'
 local getTime = require 'ext.timer'.getTime
-local sdl = require 'ffi.req' 'sdl'
+local sdl = require 'sdl'
 local ig = require 'imgui'
 
 local gl = require 'gl'

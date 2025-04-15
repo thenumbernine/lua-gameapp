@@ -1,5 +1,5 @@
 local getTime = require 'ext.timer'.getTime
-local sdl = require 'ffi.req' 'sdl'
+local sdl = require 'sdl'
 local gl = require 'gl'
 local GLProgram = require 'gl.program'
 local GLSceneObject = require 'gl.sceneobject'

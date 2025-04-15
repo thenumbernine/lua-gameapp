@@ -1,5 +1,5 @@
 local ig = require 'imgui'
-local sdl = require 'ffi.req' 'sdl'
+local sdl = require 'sdl'
 local Menu = require 'gameapp.menu.menu'
 
 local PlayingMenu = Menu:subclass()
