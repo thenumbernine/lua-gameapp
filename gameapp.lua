@@ -1,5 +1,5 @@
 --[[
-subclass of imguiapp
+subclass of imgui.app
 has stuff a game would want
 - fixed framerate
 - load/save config file
@@ -77,7 +77,7 @@ end
 --]]
 
 
-local GameApp = require 'imguiapp.withorbit'()
+local GameApp = require 'imgui.appwithorbit'()
 
 -- titlebar and menu title 
 GameApp.title = 'GameApp'
