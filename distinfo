@@ -1,0 +1,25 @@
+name = "gameapp"
+files = {
+	["README.md"] = "gameapp/README.md",
+	["gameapp.lua"] = "gameapp/gameapp.lua",
+	["menu/config.lua"] = "gameapp/menu/config.lua",
+	["menu/main.lua"] = "gameapp/menu/main.lua",
+	["menu/menu.lua"] = "gameapp/menu/menu.lua",
+	["menu/newgame.lua"] = "gameapp/menu/newgame.lua",
+	["menu/playerkeys.lua"] = "gameapp/menu/playerkeys.lua",
+	["menu/playing.lua"] = "gameapp/menu/playing.lua",
+	["menu/splash.lua"] = "gameapp/menu/splash.lua",
+	["player.lua"] = "gameapp/player.lua",
+	["serialize.lua"] = "gameapp/serialize.lua",
+	["test/test.lua"] = "gameapp/test/test.lua",
+}
+deps = {
+	"audio",
+	"ext",
+	"ffi",
+	"gl",
+	"imgui",
+	"sdl",
+	"template",
+	"vec-ffi",
+}
